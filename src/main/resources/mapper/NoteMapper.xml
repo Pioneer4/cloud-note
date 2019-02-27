@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="name.electricalqzhang.cloud.note.dao.NoteDao">
+	<select id="findNotesByNotebookId" parameterType="string" resultType="map">
+		SELECT
+			cn_note_id as id,
+			cn_note_title as title
+		FROM
+			cn_note
+		WHERE
+			cn_notebook_id = #{notebookId} AND
+            cn_note_status_id = '1'
+		ORDER BY
+			cn_note_last_modify_time DESC
+	</select>
+
+    <select id="findByNoteId" parameterType="String" resultType="name.electricalqzhang.cloud.note.entity.Note">
+        SELECT
+            cn_note_id as id,
+            cn_notebook_id as notebookId,
+            cn_user_id as userId,
+            cn_note_status_id as statusId,
+            cn_note_type_id as typeId,
+            cn_note_title as title,
+            cn_note_body as body,
+            cn_note_create_time as createTime,
+            cn_note_last_modify_time as lastModifyTime
+        FROM
+            cn_note
+        WHERE
+            cn_note_id = #{noteId}
+    </select>
+
+    <insert id="addNote" parameterType="name.electricalqzhang.cloud.note.entity.Note">
+        INSERT INTO cn_note (
+            cn_note_id,
+            cn_notebook_id,
+            cn_user_id,
+            cn_note_status_id,
+            cn_note_type_id,
+            cn_note_title,
+            cn_note_body,
+            cn_note_create_time,
+            cn_note_last_modify_time
+        ) VALUES (
+            #{id}, #{notebookId}, #{userId}, #{statusId}, #{typeId},
+            #{title}, #{body}, #{createTime}, #{lastModifyTime}
+        )
+    </insert>
+
+    <update id="updateNote" parameterType="name.electricalqzhang.cloud.note.entity.Note">
+        UPDATE
+            cn_note
+        SET
+            <!-- 这里的trim, 仅仅是用来说明trim可以消除多余字符的用法 -->
+            <trim suffixOverrides=",">
+            	<if test="notebookId!=null">
+            		cn_notebook_id = #{notebookId},
+            	</if>
+                <if test="userId!=null">
+                    cn_user_id = #{userId},
+                </if>
+                <if test="statusId!=null">
+                    cn_note_status_id = #{statusId},
+                </if>
+                <if test="typeId!=null">
+                    cn_note_type_id = #{typeId},
+                </if>
+                <if test="title!=null">
+                    cn_note_title = #{title},
+                </if>
+                <if test="body!=null">
+                    cn_note_body = #{body},
+                </if>
+                <if test="lastModifyTime!=null">
+                    cn_note_last_modify_time = #{lastModifyTime}
+                </if>
+            </trim>
+        WHERE
+            cn_note_id = #{id}
+    </update>
+
+    <select id="findDeleteNotesByUserId" parameterType="string" resultType="map">
+		SELECT
+			cn_note_id as id,
+			cn_note_title as title
+		FROM
+			cn_note
+		WHERE
+			cn_user_id = #{userId} AND
+            cn_note_status_id = '0'
+		ORDER BY
+			cn_note_last_modify_time DESC
+	</select>
+
+	<delete id="deleteNoteById" parameterType="string">
+        DELETE
+        FROM
+            cn_note
+        WHERE
+            cn_note_id = #{noteId}
+	</delete>
+
+	<select id="findNotes" resultType="map">
+		SELECT
+			cn_note_id as id,
+			cn_note_title as title
+		FROM
+			cn_note
+		<where>
+			<trim suffixOverrides="and">
+				<if test="userId != null">
+					cn_user_id = #{userId} AND
+				</if>
+				<if test="notebookId != null">
+					cn_notebook_id = #{notebookId} AND
+				</if>
+				cn_note_status_id = #{statusId}
+			</trim>
+		</where>
+		ORDER BY
+			cn_note_last_modify_time DESC
+	</select>
+
+    <!-- MyBatis 提供的 foreach, 这里相当于 cn_note_id IN (id, id, ..., id) -->
+	<delete id="deleteNotes">
+		DELETE FROM
+			cn_note
+		WHERE
+			cn_note_id IN
+			<foreach collection="ids" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="scripts/jquery.min.js"></script>
+</head>
+<body>
+	<h1>图片1</h1>
+	<p>
+		<img alt="" src="demoimg">
+	</p>
+	<p>
+		<img alt="" src="user/image.do">
+	</p>
+
+	<h1>下载图片</h1>
+	<a href="user/downloadimg.do">图片</a>
+
+	<h1>下载excel</h1>
+	<a href="user/downloadexcel.do">excel</a>
+
+	<h1>文件上传</h1>
+	<a href="user/downloadexcel.do">图片</a>
+	<form ENCTYPE="multipart/form-data" action="user/upload.do" METHOD="post">
+		File to process:<br>
+		<input NAME="userfile1" TYPE="file"><br>
+		<input NAME="userfile2" TYPE="file"><br>
+		<input TYPE="submit" value="send file">
+	</form>
+</body>
+</html>

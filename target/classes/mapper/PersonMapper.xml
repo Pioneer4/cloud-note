@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="name.electricalqzhang.cloud.note.dao.PersonDao">
+    <!-- 利用数据库自动生成的key，反添加到对象的id属性 (MyBatis用的反射原理) -->
+    <insert id="addPerson" parameterType="name.electricalqzhang.cloud.note.entity.Person"
+    	useGeneratedKeys="true" keyProperty="id">
+    	 INSERT INTO p_person (
+            id,
+            name
+        ) VALUES (
+            null,
+            #{name}
+        )
+    </insert>
+</mapper>

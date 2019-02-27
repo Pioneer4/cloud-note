@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="name.electricalqzhang.cloud.note.dao.StarsDao">
+	<select id="findStarsByUserId" parameterType="string" resultType="name.electricalqzhang.cloud.note.entity.Stars">
+		SELECT
+			cn_star_id as id,
+			cn_user_id as userId,
+			cn_stars as stars
+		FROM
+			cn_star
+		WHERE
+			cn_user_id = #{userId}
+	</select>
+
+    <insert id="insertStars" parameterType="name.electricalqzhang.cloud.note.entity.Stars">
+        INSERT INTO cn_star (
+            cn_star_id,
+            cn_user_id,
+            cn_stars
+        ) VALUES (
+            #{id},
+            #{userId},
+            #{stars}
+        )
+    </insert>
+
+    <update id="updateStars" parameterType="name.electricalqzhang.cloud.note.entity.Stars">
+        UPDATE cn_star
+        SET
+            cn_stars = #{stars}
+        WHERE
+            cn_user_id = #{userId} OR
+            cn_star_id = #{id}
+    </update>
+</mapper>

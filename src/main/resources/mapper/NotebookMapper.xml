@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="name.electricalqzhang.cloud.note.dao.NotebookDao">
+	<select id="findNotebooksByUserId" parameterType="string" resultType="map">
+		SELECT
+			cn_notebook_id as id,
+			cn_notebook_name as name
+
+			<!-- cn_user_id
+			cn_notebook_type_id
+			cn_notebook_name
+			cn_notebook_desc
+			cn_notebook_createtime  -->
+		FROM
+			cn_notebook
+		WHERE
+			cn_user_id=#{userId}
+		ORDER BY
+			cn_notebook_createtime DESC
+	</select>
+
+	<select id="countNotebookById" parameterType="string" resultType="int">
+		SELECT
+			COUNT(cn_notebook_id)
+		FROM
+			cn_notebook
+		WHERE
+			cn_notebook_id=#{notenookId}
+	</select>
+
+	<select id="findNotebooksByPage" resultType="map">
+		SELECT
+			cn_notebook_id as id,
+			cn_notebook_name as name
+		FROM
+        <!-- 动态的表名用 $ -->
+        <!-- $用于sql语句拼接，#用于绑定参数 -->
+        <!-- #无注入风险 -->
+			${table}
+		WHERE
+			cn_user_id=#{userId}
+		ORDER BY
+			cn_notebook_createtime DESC
+		LIMIT
+			#{start}, #{pageSize}
+	</select>
+</mapper>
